@@ -5,13 +5,11 @@ using UnityEngine.SceneManagement;
 
 using System.IO;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+
 
 public class GameDataManager : MonoBehaviour
 {
-    const string GAME_SCENE_NAME = "main";
+    
     const string GAME_SAVE_FILE_NAME = "gameData.json";
 
     public string currentName;
@@ -40,20 +38,7 @@ public class GameDataManager : MonoBehaviour
         currentName = name;
     }
 
-    public void StartGame()
-    {
-        SceneManager.LoadScene(GAME_SCENE_NAME);
-        
-    }
-
-    public void ExitGame()
-    {
-#if UNITY_EDITOR
-      EditorApplication.ExitPlaymode();
-#else
-        Application.Quit();
-#endif
-    }
+    
 
     [System.Serializable]
     class GameData
@@ -64,7 +49,7 @@ public class GameDataManager : MonoBehaviour
 
     public void SaveHighScore(int newScore)
     {
-        Debug.Log("saving highscore " + highScore + " > " + newScore);
+        Debug.Log("saving highscore " + newScore + " > " + highScore);
         if (newScore > highScore)
         {
             GameData gameData = new GameData();
@@ -94,7 +79,11 @@ public class GameDataManager : MonoBehaviour
 
     public string GetHighScoreString()
     {
-        return $"{currentName}: {highScore}";
+        return $"{playerWithHighestScore}: {highScore}";
     }
 
+    public string GetCurrentName()
+    {
+        return currentName;
+    }
 }
