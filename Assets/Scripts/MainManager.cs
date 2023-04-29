@@ -17,7 +17,7 @@ public class MainManager : MonoBehaviour
     private int m_Points;
     
     private bool m_GameOver = false;
-
+    private string currentPlayerName;
     
     // Start is called before the first frame update
     void Start()
@@ -36,6 +36,8 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        currentPlayerName = GameDataManager.instance.currentName;
     }
 
     private void Update()
@@ -52,20 +54,23 @@ public class MainManager : MonoBehaviour
                 Ball.transform.SetParent(null);
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
             }
+
+            
         }
         else if (m_GameOver)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
+            // save highscore
+            GameDataManager.instance.SaveHighScore(m_Points);
+            
+            SceneManager.LoadScene("menu");
+            
         }
     }
 
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        ScoreText.text = $"{currentPlayerName} Score : {m_Points}";
     }
 
     public void GameOver()
